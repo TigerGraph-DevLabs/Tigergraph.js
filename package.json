@@ -1,0 +1,46 @@
+{
+  "_from": "tigergraph.js",
+  "_id": "tigergraph.js@1.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-SkYZDMymsVjrWa4fRZqV3arbk2JXDNICz13ikDr2Cp/c+2j2bLtSL/ntpx+lQNXpAF84XMZjLhkM4fkGdgogUg==",
+  "_location": "/tigergraph.js",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "tigergraph.js",
+    "name": "tigergraph.js",
+    "escapedName": "tigergraph.js",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/tigergraph.js/-/tigergraph.js-1.0.0.tgz",
+  "_shasum": "b9cefee5612cfc43a71047eb06f3aab9363c8960",
+  "_spec": "tigergraph.js",
+  "_where": "/Users/paromitadatta/Desktop/test-tgJS",
+  "author": {
+    "name": "Shreya Chaudhary"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A TG-JS integration",
+  "license": "ISC",
+  "main": "index.js",
+  "name": "tigergraph.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.13",
+  "dependencies": {
+    "axios": "^0.20.0",
+    "express": "^4.17.1",
+    "got": "^11.6.0",
+    "node-fetch": "^2.6.0",
+    "request": "^2.88.2"
+  }
+}
