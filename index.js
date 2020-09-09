@@ -12,28 +12,72 @@ exports.getToken = (secret, domain = "localhost", lifetime = 1000000, callback =
   });
 }
 
-exports.createTigerGraphConnection = {
-  /**
-  * Sets up client. 
-  * @param {String} domain
-  * @param {String} graph
-  * @param {String} username
-  * @param {String} password 
-  * @param {String} secret
-  * @param {String} token  
-  */
-  init: function (domain = "localhost", graph = "MyGraph", username = "tigergraph", password = "tigergraph", secret, token) {
-    this.DOMAIN = domain;
+class createTigerGraphConnection {
+  constructor(host = "localhost", graph = "MyGraph", username = "tigergraph", password = "tigergraph", secret, token) {
+    this.HOST = host;
     this.GRAPH = graph;
     this.USERNAME = username;
     this.PASSWORD = password;
     this.SECRET = secret;
     this.TOKEN = token;
-    return "Success";
-  },
-  getEndpoints: function (callback = (ans) => { console.log(ans); }) {
+  }
+  echo(builtin = true, dynamic = true, static_param = true, callback = (ans) => { console.log(ans); }) {
     const options = {
-      hostname: `${this.DOMAIN}`,
+      hostname: `${this.HOST}`,
+      port: 9000,
+      path: `/endpoints?builtin=${builtin}&dynamic=${dynamic}&static=${static_param}`,
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.TOKEN}`
+      }
+    }
+    const req = https.request(options, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      let data = '';
+      res.on('data', chunk => {
+        data += chunk;
+      });
+      res.on('end', () => {
+        return callback(JSON.parse(data));
+      });
+    });
+    req.on('error', error => {
+      console.error(error);
+    });
+    req.end();
+  }
+  statistic(seconds = 60, callback = (ans) => { console.log(ans); }) {
+    if (seconds > 60 || seconds < 0) {
+      console.error("Seconds must be between 0-60 inclusive.")
+    } else {
+      const options = {
+        hostname: this.HOST,
+        port: 9000,
+        path: `/statistics/${this.GRAPH}?seconds=${seconds}`,
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.TOKEN}`
+        }
+      }
+      const req = https.request(options, res => {
+        console.log(`statusCode: ${res.statusCode}`)
+        let data = '';
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', async () => {
+          return callback(JSON.parse(data));
+        });
+      });
+      req.on('error', error => {
+        console.error(error);
+      });
+      req.end();
+    }
+  }
+  getEndpoints(callback = (ans) => { console.log(ans); }) {
+    const options = {
+      hostname: this.HOST,
       port: 9000,
       path: '/endpoints',
       method: 'GET',
@@ -55,10 +99,45 @@ exports.createTigerGraphConnection = {
       console.error(error);
     });
     req.end();
-  },
-  getVertices: function (vertex = "_", callback = (ans) => { console.log(ans); }) {
+  }
+  version(callback = (ans) => { console.log(ans); }) {
     const options = {
-      hostname: `${this.DOMAIN}`,
+      hostname: this.HOST,
+      port: 9000,
+      path: '/version',
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.TOKEN}`
+      }
+    }
+    const req = https.request(options, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      let data = '';
+      res.on('data', chunk => {
+        data += chunk;
+      });
+      res.on('end', async () => {
+        return callback(data);
+      });
+    });
+    req.on('error', error => {
+      console.error(error);
+    });
+    req.end();
+  }
+
+  /**
+   * VERTICES
+   */
+
+  /**
+   * 
+   * @param {String} vertex 
+   * @param {function} callback 
+   */
+  getVertices(vertex = "_", callback = (ans) => { console.log(ans); }) {
+    const options = {
+      hostname: `${this.HOST}`,
       port: 9000,
       path: `/graph/${this.GRAPH}/vertices/${vertex}`,
       method: 'GET',
@@ -83,10 +162,22 @@ exports.createTigerGraphConnection = {
       console.error(error);
     });
     req.end();
-  },
-  getEdges: function (vertex_type, vertex_id, edge = "_", callback = (ans) => { console.log(ans); }) {
+  }
+
+  /**
+   * EDGES
+   */
+
+  /**
+   * 
+   * @param {String} vertex_type 
+   * @param {String} vertex_id 
+   * @param {String} edge 
+   * @param {function} callback 
+   */
+  getEdges(vertex_type, vertex_id, edge = "_", callback = (ans) => { console.log(ans); }) {
     const options = {
-      hostname: `${this.DOMAIN}`,
+      hostname: `${this.HOST}`,
       port: 9000,
       path: `/graph/${this.GRAPH}/edges/${vertex_type}/${vertex_id}/${edge}`,
       method: 'GET',
@@ -112,35 +203,75 @@ exports.createTigerGraphConnection = {
     });
     req.end();
   }
+
+
+  /**
+   * QUERIES
+   */
+
+
+  showProcessesList(callback = (ans) => { console.log(ans); }) {
+    const options = {
+      hostname: `${this.HOST}`,
+      port: 9000,
+      path: `/showprocesslist`,
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.TOKEN}`
+      }
+    };
+    const req = https.request(options, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      let data = '';
+      res.on('data', chunk => {
+        data += chunk;
+      });
+      res.on('end', async () => {
+        return callback(JSON.parse(data));
+      });
+      res.on('error', (err) => {
+        console.log(err);
+      })
+    });
+    req.on('error', error => {
+      console.error(error);
+    });
+    req.end();
+  }
+
+  abortQuery(requestid = ["all"], callback = (ans) => { console.log(ans); }) {
+    const options = {
+      hostname: `${this.HOST}`,
+      port: 9000,
+      path: `/abortquery/${this.GRAPH}?requestid=${requestid.join("&")}`,
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.TOKEN}`
+      }
+    };
+    const req = https.request(options, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      let data = '';
+      res.on('data', chunk => {
+        data += chunk;
+      });
+      res.on('end', async () => {
+        return callback(JSON.parse(data));
+      });
+      res.on('error', (err) => {
+        console.log(err);
+      })
+    });
+    req.on('error', error => {
+      console.error(error);
+    });
+    req.end();
+  }
 }
 
-// exports.getToken = (secret, domain = "localhost", lifetime = 1000000) => {
-//   const https = require('https');
+exports.createTigerGraphConnection = createTigerGraphConnection;
 
-//   https.get(`https://${domain}.i.tgcloud.io:9000/requesttoken?secret=${secret}&lifetime=${lifetime}`, (resp) => {
-//     let data = '';
-//     resp.on('data', (chunk) => {
-//       data += chunk;
-//     });
-//     resp.on('end', () => {
-//       let ans = await JSON.parse(data)["token"];
-//       console.log(ans);
-//       return ans;
-//     });
 
-//   }).on("error", (err) => {
-//     console.error(err);
-//   });
-// } 
-
-exports.createTigerGraphConnection = (domain, username, password, secret, token) => {
-  DOMAIN = domain;
-  USERNAME = username;
-  PASSWORD = password;
-  SECRET = secret;
-  TOKEN = token;
-}
-
-exports.printMsg = function() {
-  console.log("This is a message from the demo package");
-}
+// exports.printMsg = function() {
+//   console.log("This is a message from the demo package");
+// }

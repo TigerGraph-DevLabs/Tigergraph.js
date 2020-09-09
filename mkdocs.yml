@@ -1,0 +1,10 @@
+site_name: TigerGraph.js
+
+nav:
+  - about.md
+  - "Docs":
+    - Main/index.md
+  - contribute.md
+  - license.md
+
+theme: material
