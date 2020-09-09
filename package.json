@@ -5,6 +5,9 @@
   "_integrity": "sha512-SkYZDMymsVjrWa4fRZqV3arbk2JXDNICz13ikDr2Cp/c+2j2bLtSL/ntpx+lQNXpAF84XMZjLhkM4fkGdgogUg==",
   "_location": "/tigergraph.js",
   "_phantomChildren": {},
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "_requested": {
     "type": "tag",
     "registry": true,
