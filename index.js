@@ -152,7 +152,11 @@ class createTigerGraphConnection {
         data += chunk;
       });
       res.on('end', async () => {
-        return callback(JSON.parse(data)["results"]);
+        if (JSON.parse(data)["error"]) {
+          console.error(JSON.parse(data)["message"]);
+        } else {
+          return callback(JSON.parse(data)["results"]);
+        }
       });
       res.on('error', (err) => {
         console.log(err);
@@ -192,7 +196,11 @@ class createTigerGraphConnection {
         data += chunk;
       });
       res.on('end', async () => {
-        return callback(JSON.parse(data)["results"]);
+        if (JSON.parse(data)["error"]) {
+          console.error(JSON.parse(data)["message"]);
+        } else {
+          return callback(JSON.parse(data)["results"]);
+        }
       });
       res.on('error', (err) => {
         console.log(err);
@@ -257,6 +265,50 @@ class createTigerGraphConnection {
       });
       res.on('end', async () => {
         return callback(JSON.parse(data));
+      });
+      res.on('error', (err) => {
+        console.log(err);
+      })
+    });
+    req.on('error', error => {
+      console.error(error);
+    });
+    req.end();
+  }
+
+  runQuery(queryname = "MyQuery", parameters = {}, callback = (ans) => { console.log(ans); }) {
+    let endpoints = `/query/${this.GRAPH}/${queryname}`;
+    if (parameters != {}) {
+      endpoints += "?";
+      let c = 0;
+      for (let i in parameters) {
+        // console.log(i);
+        endpoints += `${i}=${parameters[i]}&`;
+      }
+    }
+    endpoints = endpoints.slice(0, -1);
+    // console.log(endpoints);
+    const options = {
+      hostname: `${this.HOST}`,
+      port: 9000,
+      path: endpoints,
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.TOKEN}`
+      }
+    };
+    const req = https.request(options, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      let data = '';
+      res.on('data', chunk => {
+        data += chunk;
+      });
+      res.on('end', async () => {
+        if (JSON.parse(data)["error"]) {
+          console.error(JSON.parse(data)["message"]);
+        } else {
+          return callback(JSON.parse(data)["results"]);
+        }
       });
       res.on('error', (err) => {
         console.log(err);
