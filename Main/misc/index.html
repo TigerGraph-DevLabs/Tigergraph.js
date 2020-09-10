@@ -646,50 +646,42 @@
 </ul>
 <h2 id="statistic">statistic</h2>
 <h3 id="about_1">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
+<p>This endpoint returns real-time query performance statistics over the given time period, as specified by the seconds parameter.</p>
 <h3 id="code_1">Code</h3>
-<pre><code>conn.echo(callback);
+<pre><code>conn.statistic(seconds, callback);
 </code></pre>
 
-<pre><code>conn.echo((data) =&gt; {
+<pre><code>conn.echo((60, data) =&gt; {
     console.log(data);
 });
 </code></pre>
 
 <h3 id="parameters_1">Parameters</h3>
 <ul>
-<li>Callback</li>
+<li>Seconds<ul>
+<li>Type: int, between 0-60 inclusive</li>
+<li>Description: The time period to get statistics for the queries.</li>
+</ul>
+</li>
+<li>Callback<ul>
 <li>Function of what to do next</li>
+</ul>
+</li>
 </ul>
 <h2 id="getendpoints">getEndpoints</h2>
 <h3 id="about_2">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
+<p>This endpoint returns a list of the installed endpoints and their parameters. There are three types of endpoints, described in the table below.</p>
 <h3 id="code_2">Code</h3>
-<pre><code>conn.echo(builtin, dynamic, statistic, callback);
+<pre><code>conn.getEndpoints(callback);
 </code></pre>
 
-<pre><code>conn.echo(true, true, true, (data) =&gt; {
+<pre><code>conn.getEndpoints((data) =&gt; {
     console.log(data);
 });
 </code></pre>
 
 <h3 id="parameters_2">Parameters</h3>
 <ul>
-<li>buildin<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints preinstalled in the TigerGraph system.</li>
-</ul>
-</li>
-<li>dynamic<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints generated when compiling GSQL queries.</li>
-</ul>
-</li>
-<li>static<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for user-installed endpoints.</li>
-</ul>
-</li>
 <li>callback<ul>
 <li>Type: Function</li>
 <li>Description: Function of what to do with the values given.</li>
@@ -698,33 +690,18 @@
 </ul>
 <h2 id="version">version</h2>
 <h3 id="about_3">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
+<p>This endpoint returns the git versions of all components of the system. This can be useful information when requesting help from TigerGraph's support team.</p>
 <h3 id="code_3">Code</h3>
-<pre><code>conn.echo(builtin, dynamic, statistic, callback);
+<pre><code>conn.version(callback);
 </code></pre>
 
-<pre><code>conn.echo(true, true, true, (data) =&gt; {
+<pre><code>conn.version((data) =&gt; {
     console.log(data);
 });
 </code></pre>
 
 <h3 id="parameters_3">Parameters</h3>
 <ul>
-<li>buildin<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints preinstalled in the TigerGraph system.</li>
-</ul>
-</li>
-<li>dynamic<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints generated when compiling GSQL queries.</li>
-</ul>
-</li>
-<li>static<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for user-installed endpoints.</li>
-</ul>
-</li>
 <li>callback<ul>
 <li>Type: Function</li>
 <li>Description: Function of what to do with the values given.</li>

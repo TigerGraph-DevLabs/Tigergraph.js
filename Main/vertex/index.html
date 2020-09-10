@@ -500,31 +500,21 @@
 </ul>
 <h2 id="delvertices">delVertices</h2>
 <h3 id="about_1">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
+<p>Deletes vertices of a certain type from the graph.</p>
 <h3 id="code_1">Code</h3>
-<pre><code>conn.echo(builtin, dynamic, statistic, callback);
+<pre><code>conn.delVertices(vertex_type, callback);
 </code></pre>
 
-<pre><code>conn.echo(true, true, true, (data) =&gt; {
+<pre><code>conn.delVertices(&quot;Vertex Type&quot;, (data) =&gt; {
     console.log(data);
 });
 </code></pre>
 
 <h3 id="parameters_1">Parameters</h3>
 <ul>
-<li>buildin<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints preinstalled in the TigerGraph system.</li>
-</ul>
-</li>
-<li>dynamic<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints generated when compiling GSQL queries.</li>
-</ul>
-</li>
-<li>static<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for user-installed endpoints.</li>
+<li>vertex_type<ul>
+<li>Type: String</li>
+<li>Description: The type of vertex</li>
 </ul>
 </li>
 <li>callback<ul>

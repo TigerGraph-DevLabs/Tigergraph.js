@@ -511,31 +511,32 @@
 </ul>
 <h2 id="deledges">delEdges</h2>
 <h3 id="about_1">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
+<p>Deletes Edges</p>
 <h3 id="code_1">Code</h3>
-<pre><code>conn.echo(builtin, dynamic, statistic, callback);
+<pre><code>conn.delEdges(vertex_type, vertex_id, edge, callback);
 </code></pre>
 
-<pre><code>conn.echo(true, true, true, (data) =&gt; {
+<pre><code>conn.delEdges(&quot;Vertex Type&quot;, &quot;Unique_ID&quot;, &quot;_&quot;, (data) =&gt; {
     console.log(data);
 });
 </code></pre>
 
 <h3 id="parameters_1">Parameters</h3>
 <ul>
-<li>buildin<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints preinstalled in the TigerGraph system.</li>
+<li>vertex_type<ul>
+<li>Type: String</li>
+<li>Description: The type of the vertices</li>
 </ul>
 </li>
-<li>dynamic<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints generated when compiling GSQL queries.</li>
+<li>vertex_id<ul>
+<li>Type: String</li>
+<li>Description: The unqiue id of the vertex</li>
 </ul>
 </li>
-<li>static<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for user-installed endpoints.</li>
+<li>edge<ul>
+<li>Type: String</li>
+<li>Description: The edge types desired</li>
+<li>Note: "_" will return all edges</li>
 </ul>
 </li>
 <li>callback<ul>
