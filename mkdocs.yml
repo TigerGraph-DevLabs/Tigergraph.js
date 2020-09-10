@@ -1,9 +1,12 @@
 site_name: TigerGraph.js
 
 nav:
-  - about.md
+  - index.md
   - "Docs":
-    - Main/index.md
+    - Main/vertex.md
+    - Main/edge.md
+    - Main/query.md
+    - Main/misc.md
   - contribute.md
   - license.md
 
