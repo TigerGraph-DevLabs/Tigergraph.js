@@ -95,8 +95,8 @@ class createTigerGraphConnection {
             return resolve(JSON.parse(data));
             });
         });
-        req.on('error', error => {
-            console.error(error);
+        req.on('error', (e) => {
+          reject(e);
         });
         req.end();
     });
@@ -131,8 +131,8 @@ class createTigerGraphConnection {
                 return resolve(JSON.parse(data));
                 });
             });
-            req.on('error', error => {
-                console.error(error);
+            req.on('error', (e) => {
+              reject(e);
             });
             req.end();
         });
@@ -159,8 +159,8 @@ class createTigerGraphConnection {
                 return resolve(JSON.parse(data));
             });
         });
-        req.on('error', error => {
-            console.error(error);
+        req.on('error', (e) => {
+          reject(e);
         });
         req.end();
     });
@@ -186,8 +186,8 @@ class createTigerGraphConnection {
                 return resolve(data);
             });
         });
-        req.on('error', error => {
-        console.error(error);
+        req.on('error', (e) => {
+          reject(e);
         });
         req.end();
     });
@@ -225,12 +225,12 @@ class createTigerGraphConnection {
           return resolve(JSON.parse(data)["results"]);
         }
       });
-      res.on('error', (err) => {
-        console.log(err);
-      })
+      res.on('error', (e) => {
+        reject(e);
+      });
     });
-    req.on('error', error => {
-      console.error(error);
+    req.on('error', (e) => {
+      reject(e);
     });
     req.end();
       });
@@ -266,12 +266,12 @@ class createTigerGraphConnection {
           return resolve(JSON.parse(data)["results"]);
         }
       });
-      res.on('error', (err) => {
-        console.log(err);
-      })
+      res.on('error', (e) => {
+        reject(e);
+      });
     });
-    req.on('error', error => {
-      console.error(error);
+    req.on('error', (e) => {
+      reject(e);
     });
     req.end();
     });
@@ -311,12 +311,12 @@ class createTigerGraphConnection {
           return resolve(JSON.parse(data)["results"]);
         }
       });
-      res.on('error', (err) => {
-        console.log(err);
-      })
+      res.on('error', (e) => {
+        reject(e);
+      });
     });
-    req.on('error', error => {
-      console.error(error);
+    req.on('error', (e) => {
+      reject(e);
     });
     req.end();
 })
@@ -348,12 +348,12 @@ class createTigerGraphConnection {
       res.on('end', async () => {
         return resolve(JSON.parse(data));
       });
-      res.on('error', (err) => {
-        console.log(err);
-      })
+      res.on('error', (e) => {
+        reject(e);
+      });
     });
-    req.on('error', error => {
-      console.error(error);
+    req.on('error', (e) => {
+      reject(e);
     });
     req.end();
 });
@@ -379,12 +379,12 @@ class createTigerGraphConnection {
       res.on('end', async () => {
         return resolve(JSON.parse(data));
       });
-      res.on('error', (err) => {
-        console.log(err);
-      })
+      res.on('error', (e) => {
+        reject(e);
+      });
     });
-    req.on('error', error => {
-      console.error(error);
+    req.on('error', (e) => {
+      reject(e);
     });
     req.end();
 });
@@ -423,12 +423,12 @@ class createTigerGraphConnection {
           return resolve(JSON.parse(data)["results"]);
         }
       });
-      res.on('error', (err) => {
-        console.log(err);
-      })
+      res.on('error', (e) => {
+        reject(e);
+      });
     });
-    req.on('error', error => {
-      console.error(error);
+    req.on('error', (e) => {
+      reject(e);
     });
     req.end();
 });
