@@ -7,19 +7,45 @@ const https = require("https")
  * @param {Integer} lifetime 
  * @returns 
  */
-exports.getToken = (secret, domain = "localhost", lifetime = 1000000) => {
-    return new Promise((resolve, reject) => {
-        https.get(`https://${domain}.i.tgcloud.io:9000/requesttoken?secret=${secret}&lifetime=${lifetime}`, async (resp) => {
-            let data = '';
-            resp.on('data', (chunk) => {
-            data += chunk;
-            });
-            resp.on('end', async () => {
-            return resolve(JSON.parse(data)["token"]);
-            })
-        });
+exports.getToken = getToken = (host = "localhost", graphname = "MyGraph", username = "tigergraph", password = "tigergraph") => {
+  let postData = JSON.stringify({
+    "graph": graphname
+  });
+
+  let options = {
+    hostname: host,
+    port: 9000,
+    path: '/requesttoken',
+    method: 'POST',
+    headers: {
+      'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64'),
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': postData.length
+      }
+  };
+
+  return new Promise((resolve, reject) => {
+    let req = https.request(options, (res) => {
+      console.log('statusCode:', res.statusCode);
+      console.log('headers:', res.headers);
+  
+      let data = '';
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      res.on('end', async () => {
+        return resolve(JSON.parse(data)["results"]["token"]);
+      });
     });
-};
+  
+    req.on('error', (e) => {
+      reject(e);
+    });
+  
+    req.write(postData);
+    req.end();
+  });
+}
 
 class createTigerGraphConnection {
 
