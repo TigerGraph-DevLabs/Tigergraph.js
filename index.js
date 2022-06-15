@@ -1,18 +1,37 @@
 const https = require("https")
 
-exports.getToken = (secret, domain = "localhost", lifetime = 1000000, callback = (ans) => { console.log(ans); }) => {
-  https.get(`https://${domain}.i.tgcloud.io:9000/requesttoken?secret=${secret}&lifetime=${lifetime}`, async (resp) => {
-    let data = '';
-    resp.on('data', (chunk) => {
-      data += chunk;
+/**
+ * 
+ * @param {String} secret 
+ * @param {String} domain 
+ * @param {Integer} lifetime 
+ * @returns 
+ */
+exports.getToken = (secret, domain = "localhost", lifetime = 1000000) => {
+    return new Promise((resolve, reject) => {
+        https.get(`https://${domain}.i.tgcloud.io:9000/requesttoken?secret=${secret}&lifetime=${lifetime}`, async (resp) => {
+            let data = '';
+            resp.on('data', (chunk) => {
+            data += chunk;
+            });
+            resp.on('end', async () => {
+            return resolve(JSON.parse(data)["token"]);
+            })
+        });
     });
-    resp.on('end', async () => {
-      return callback(JSON.parse(data)["token"])
-    })
-  });
-}
+};
 
 class createTigerGraphConnection {
+
+  /**
+   * Connect to the TG Cloud Solution
+   * @param {String} host 
+   * @param {String} graph 
+   * @param {String} username 
+   * @param {String} password 
+   * @param {String} secret 
+   * @param {String} token 
+   */  
   constructor(host = "localhost", graph = "MyGraph", username = "tigergraph", password = "tigergraph", secret, token) {
     this.HOST = host;
     this.GRAPH = graph;
@@ -21,109 +40,131 @@ class createTigerGraphConnection {
     this.SECRET = secret;
     this.TOKEN = token;
   }
-  echo(builtin = true, dynamic = true, static_param = true, callback = (ans) => { console.log(ans); }) {
-    const options = {
-      hostname: `${this.HOST}`,
-      port: 9000,
-      path: `/endpoints?builtin=${builtin}&dynamic=${dynamic}&static=${static_param}`,
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.TOKEN}`
-      }
-    }
-    const req = https.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
-      });
-      res.on('end', () => {
-        return callback(JSON.parse(data));
-      });
+
+  /**
+   * 
+   * @param {Boolean} builtin 
+   * @param {Boolean} dynamic 
+   * @param {Boolean} static_param 
+   * @returns 
+   */
+  echo(builtin = true, dynamic = true, static_param = true) {
+    return new Promise ((resolve, reject) => {
+        const options = {
+            hostname: `${this.HOST}`,
+            port: 9000,
+            path: `/endpoints?builtin=${builtin}&dynamic=${dynamic}&static=${static_param}`,
+            method: 'GET',
+            headers: {
+            'Authorization': `Bearer ${this.TOKEN}`
+            }
+        }
+        const req = https.request(options, res => {
+            console.log(`statusCode: ${res.statusCode}`)
+            let data = '';
+            res.on('data', chunk => {
+            data += chunk;
+            });
+            res.on('end', () => {
+            return resolve(JSON.parse(data));
+            });
+        });
+        req.on('error', error => {
+            console.error(error);
+        });
+        req.end();
     });
-    req.on('error', error => {
-      console.error(error);
-    });
-    req.end();
   }
-  statistic(seconds = 60, callback = (ans) => { console.log(ans); }) {
+
+  /**
+   * 
+   * @param {Integer} seconds 
+   * @returns 
+   */
+  statistic(seconds = 60) {
     if (seconds > 60 || seconds < 0) {
       console.error("Seconds must be between 0-60 inclusive.")
     } else {
-      const options = {
+        return new Promise((resolve, reject) => {
+            const options = {
+                hostname: this.HOST,
+                port: 9000,
+                path: `/statistics/${this.GRAPH}?seconds=${seconds}`,
+                method: 'GET',
+                headers: {
+                'Authorization': `Bearer ${this.TOKEN}`
+                }
+            }
+            const req = https.request(options, res => {
+                console.log(`statusCode: ${res.statusCode}`)
+                let data = '';
+                res.on('data', chunk => {
+                data += chunk;
+                });
+                res.on('end', async () => {
+                return resolve(JSON.parse(data));
+                });
+            });
+            req.on('error', error => {
+                console.error(error);
+            });
+            req.end();
+        });
+    }
+  }
+  getEndpoints() {
+    return new Promise((resolve, reject) => {
+        const options = {
+            hostname: this.HOST,
+            port: 9000,
+            path: '/endpoints',
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${this.TOKEN}`
+            }
+        }
+        const req = https.request(options, res => {
+            console.log(`statusCode: ${res.statusCode}`)
+            let data = '';
+            res.on('data', chunk => {
+                data += chunk;
+            });
+            res.on('end', async () => {
+                return resolve(JSON.parse(data));
+            });
+        });
+        req.on('error', error => {
+            console.error(error);
+        });
+        req.end();
+    });
+  }
+  version() {
+    return new Promise((resolve, reject) => {
+        const options = {
         hostname: this.HOST,
         port: 9000,
-        path: `/statistics/${this.GRAPH}?seconds=${seconds}`,
+        path: '/version',
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.TOKEN}`
+            'Authorization': `Bearer ${this.TOKEN}`
         }
-      }
-      const req = https.request(options, res => {
-        console.log(`statusCode: ${res.statusCode}`)
-        let data = '';
-        res.on('data', chunk => {
-          data += chunk;
+        }
+        const req = https.request(options, res => {
+            console.log(`statusCode: ${res.statusCode}`)
+            let data = '';
+            res.on('data', chunk => {
+                data += chunk;
+            });
+            res.on('end', async () => {
+                return resolve(data);
+            });
         });
-        res.on('end', async () => {
-          return callback(JSON.parse(data));
-        });
-      });
-      req.on('error', error => {
+        req.on('error', error => {
         console.error(error);
-      });
-      req.end();
-    }
-  }
-  getEndpoints(callback = (ans) => { console.log(ans); }) {
-    const options = {
-      hostname: this.HOST,
-      port: 9000,
-      path: '/endpoints',
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.TOKEN}`
-      }
-    }
-    const req = https.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
-      });
-      res.on('end', async () => {
-        return callback(JSON.parse(data));
-      });
+        });
+        req.end();
     });
-    req.on('error', error => {
-      console.error(error);
-    });
-    req.end();
-  }
-  version(callback = (ans) => { console.log(ans); }) {
-    const options = {
-      hostname: this.HOST,
-      port: 9000,
-      path: '/version',
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.TOKEN}`
-      }
-    }
-    const req = https.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
-      });
-      res.on('end', async () => {
-        return callback(data);
-      });
-    });
-    req.on('error', error => {
-      console.error(error);
-    });
-    req.end();
   }
 
   /**
@@ -133,9 +174,9 @@ class createTigerGraphConnection {
   /**
    * 
    * @param {String} vertex 
-   * @param {function} callback 
    */
-  getVertices(vertex = "_", callback = (ans) => { console.log(ans); }) {
+  getVertices(vertex = "_") {
+      return new Promise((resolve, reject) => {
     const options = {
       hostname: `${this.HOST}`,
       port: 9000,
@@ -155,7 +196,7 @@ class createTigerGraphConnection {
         if (JSON.parse(data)["error"]) {
           console.error(JSON.parse(data)["message"]);
         } else {
-          return callback(JSON.parse(data)["results"]);
+          return resolve(JSON.parse(data)["results"]);
         }
       });
       res.on('error', (err) => {
@@ -166,16 +207,17 @@ class createTigerGraphConnection {
       console.error(error);
     });
     req.end();
+      });
   }
 
   /**
    * 
    * @param {String} vertex_name
    * @param {String} vertex_id
-   * @param {JSON} params
-   * @param {function} callback 
+   * @param {JSON} attributes
    */
-   upsertVertex(vertex_name = "_", vertex_id = "_", params = {}, callback = (ans) => { console.log(ans); }) {
+   upsertVertex(vertex_name = "_", vertex_id = "_", attributes = {}) {
+    return new Promise((resolve, reject) => {
     const options = {
       hostname: `${this.HOST}`,
       port: 9000,
@@ -195,7 +237,7 @@ class createTigerGraphConnection {
         if (JSON.parse(data)["error"]) {
           console.error(JSON.parse(data)["message"]);
         } else {
-          return callback(JSON.parse(data)["results"]);
+          return resolve(JSON.parse(data)["results"]);
         }
       });
       res.on('error', (err) => {
@@ -206,6 +248,7 @@ class createTigerGraphConnection {
       console.error(error);
     });
     req.end();
+    });
   }
 
   /**
@@ -217,9 +260,9 @@ class createTigerGraphConnection {
    * @param {String} vertex_type 
    * @param {String} vertex_id 
    * @param {String} edge 
-   * @param {function} callback 
    */
-  getEdges(vertex_type, vertex_id, edge = "_", callback = (ans) => { console.log(ans); }) {
+  getEdges(vertex_type, vertex_id, edge = "_") {
+      return new Promise((resolve, reject) => {
     const options = {
       hostname: `${this.HOST}`,
       port: 9000,
@@ -239,7 +282,7 @@ class createTigerGraphConnection {
         if (JSON.parse(data)["error"]) {
           console.error(JSON.parse(data)["message"]);
         } else {
-          return callback(JSON.parse(data)["results"]);
+          return resolve(JSON.parse(data)["results"]);
         }
       });
       res.on('error', (err) => {
@@ -250,6 +293,7 @@ class createTigerGraphConnection {
       console.error(error);
     });
     req.end();
+})
   }
 
 
@@ -258,7 +302,8 @@ class createTigerGraphConnection {
    */
 
 
-  showProcessesList(callback = (ans) => { console.log(ans); }) {
+  showProcessesList() {
+    return new Promise((resolve, reject) => {
     const options = {
       hostname: `${this.HOST}`,
       port: 9000,
@@ -275,7 +320,7 @@ class createTigerGraphConnection {
         data += chunk;
       });
       res.on('end', async () => {
-        return callback(JSON.parse(data));
+        return resolve(JSON.parse(data));
       });
       res.on('error', (err) => {
         console.log(err);
@@ -285,9 +330,11 @@ class createTigerGraphConnection {
       console.error(error);
     });
     req.end();
+});
   }
 
-  abortQuery(requestid = ["all"], callback = (ans) => { console.log(ans); }) {
+  abortQuery(requestid = ["all"]) {
+    return new Promise((resolve, reject) => {
     const options = {
       hostname: `${this.HOST}`,
       port: 9000,
@@ -304,7 +351,7 @@ class createTigerGraphConnection {
         data += chunk;
       });
       res.on('end', async () => {
-        return callback(JSON.parse(data));
+        return resolve(JSON.parse(data));
       });
       res.on('error', (err) => {
         console.log(err);
@@ -314,20 +361,20 @@ class createTigerGraphConnection {
       console.error(error);
     });
     req.end();
+});
   }
 
-  runQuery(queryname = "MyQuery", parameters = {}, callback = (ans) => { console.log(ans); }) {
+  runQuery(queryname = "MyQuery", parameters = {}) {
+    return new Promise((resolve, reject) => {
     let endpoints = `/query/${this.GRAPH}/${queryname}`;
     if (parameters != {}) {
       endpoints += "?";
       let c = 0;
-      for (let i in parameters) {
-        // console.log(i);
-        endpoints += `${i}=${parameters[i]}&`;
+      for (let params in parameters) {
+        endpoints += `${params}=${parameters[params]}&`;
       }
     }
     endpoints = endpoints.slice(0, -1);
-    // console.log(endpoints);
     const options = {
       hostname: `${this.HOST}`,
       port: 9000,
@@ -347,7 +394,7 @@ class createTigerGraphConnection {
         if (JSON.parse(data)["error"]) {
           console.error(JSON.parse(data)["message"]);
         } else {
-          return callback(JSON.parse(data)["results"]);
+          return resolve(JSON.parse(data)["results"]);
         }
       });
       res.on('error', (err) => {
@@ -358,12 +405,8 @@ class createTigerGraphConnection {
       console.error(error);
     });
     req.end();
+});
   }
 }
 
 exports.createTigerGraphConnection = createTigerGraphConnection;
-
-
-// exports.printMsg = function() {
-//   console.log("This is a message from the demo package");
-// }
