@@ -169,6 +169,46 @@ class createTigerGraphConnection {
   }
 
   /**
+   * 
+   * @param {String} vertex_name
+   * @param {String} vertex_id
+   * @param {JSON} params
+   * @param {function} callback 
+   */
+   upsertVertex(vertex_name = "_", vertex_id = "_", params = {}, callback = (ans) => { console.log(ans); }) {
+    const options = {
+      hostname: `${this.HOST}`,
+      port: 9000,
+      path: `/graph/${this.GRAPH}`,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.TOKEN}`
+      }
+    };
+    const req = https.request(options, res => {
+      console.log(`statusCode: ${res.statusCode}`)
+      let data = '';
+      res.on('data', chunk => {
+        data += chunk;
+      });
+      res.on('end', async () => {
+        if (JSON.parse(data)["error"]) {
+          console.error(JSON.parse(data)["message"]);
+        } else {
+          return callback(JSON.parse(data)["results"]);
+        }
+      });
+      res.on('error', (err) => {
+        console.log(err);
+      })
+    });
+    req.on('error', error => {
+      console.error(error);
+    });
+    req.end();
+  }
+
+  /**
    * EDGES
    */
 
