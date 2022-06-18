@@ -290,40 +290,82 @@ class TigerGraphConnection {
    * @param {String} edge 
    */
   getEdges(vertex_type, vertex_id, edge = "_") {
-      return new Promise((resolve, reject) => {
-    const options = {
-      hostname: `${this.HOST}`,
-      port: 9000,
-      path: `/graph/${this.GRAPH}/edges/${vertex_type}/${vertex_id}/${edge}`,
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.TOKEN}`
-      }
-    };
-    const req = https.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
-      });
-      res.on('end', async () => {
-        if (JSON.parse(data)["error"]) {
-          console.error(JSON.parse(data)["message"]);
-        } else {
-          return resolve(JSON.parse(data)["results"]);
+    return new Promise((resolve, reject) => {
+      const options = {
+        hostname: `${this.HOST}`,
+        port: 9000,
+        path: `/graph/${this.GRAPH}/edges/${vertex_type}/${vertex_id}/${edge}`,
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.TOKEN}`
         }
+      };
+      const req = https.request(options, res => {
+        console.log(`statusCode: ${res.statusCode}`)
+        let data = '';
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', async () => {
+          if (JSON.parse(data)["error"]) {
+            console.error(JSON.parse(data)["message"]);
+          } else {
+            return resolve(JSON.parse(data)["results"]);
+          }
+        });
+        res.on('error', (e) => {
+          reject(e);
+        });
       });
-      res.on('error', (e) => {
+      req.on('error', (e) => {
         reject(e);
       });
+      req.end();
     });
-    req.on('error', (e) => {
-      reject(e);
-    });
-    req.end();
-})
   }
 
+  /**
+   * 
+   * @param {String} vertex_name
+   * @param {String} vertex_id
+   * @param {JSON} attributes
+   */
+  upsertEdge(source_vertex_name = "_", source_vertex_id = "_", edge_name, target_vertex_name = "_", target_vertex_id = "_", attributes = {}) {
+    let postData = JSON.stringify({edges: {[source_vertex_name]: {[source_vertex_id]: {[edge_name]: {[target_vertex_name]: {[target_vertex_id]: attributes}}}}}});
+    return new Promise((resolve, reject) => {
+      const options = {
+        hostname: `${this.HOST}`,
+        port: 9000,
+        path: `/graph/${this.GRAPH}`,
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.TOKEN}`
+        }
+      };
+      const req = https.request(options, res => {
+        console.log(`statusCode: ${res.statusCode}`);
+        let data = '';
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', async () => {
+          if (JSON.parse(data)["error"]) {
+            reject(JSON.parse(data)["message"]);
+          } else {
+            return resolve(JSON.parse(data)["results"]);
+          }
+        });
+        res.on('error', (e) => {
+          reject(e);
+        });
+      });
+      req.on('error', (e) => {
+        reject(e);
+      });    
+      req.write(postData);
+      req.end();
+    });
+  }
 
   /**
    * QUERIES
