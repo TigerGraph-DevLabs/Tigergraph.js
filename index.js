@@ -374,108 +374,107 @@ class TigerGraphConnection {
 
   showProcessesList() {
     return new Promise((resolve, reject) => {
-    const options = {
-      hostname: `${this.HOST}`,
-      port: 9000,
-      path: `/showprocesslist`,
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.TOKEN}`
-      }
-    };
-    const req = https.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
+      const options = {
+        hostname: `${this.HOST}`,
+        port: 9000,
+        path: `/showprocesslist/${this.GRAPH}`,
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.TOKEN}`
+        }
+      };
+      const req = https.request(options, res => {
+        let data = '';
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', async () => {
+          return resolve(JSON.parse(data)["results"]);
+        });
+        res.on('error', (e) => {
+          reject(e);
+        });
       });
-      res.on('end', async () => {
-        return resolve(JSON.parse(data));
-      });
-      res.on('error', (e) => {
+      req.on('error', (e) => {
         reject(e);
       });
+      req.end();
     });
-    req.on('error', (e) => {
-      reject(e);
-    });
-    req.end();
-});
   }
 
   abortQuery(requestid = ["all"]) {
     return new Promise((resolve, reject) => {
-    const options = {
-      hostname: `${this.HOST}`,
-      port: 9000,
-      path: `/abortquery/${this.GRAPH}?requestid=${requestid.join("&")}`,
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.TOKEN}`
-      }
-    };
-    const req = https.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
+      const options = {
+        hostname: `${this.HOST}`,
+        port: 9000,
+        path: `/abortquery/${this.GRAPH}?requestid=${requestid.join("&")}`,
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.TOKEN}`
+        }
+      };
+      const req = https.request(options, res => {
+        console.log(`statusCode: ${res.statusCode}`)
+        let data = '';
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', async () => {
+          return resolve(JSON.parse(data));
+        });
+        res.on('error', (e) => {
+          reject(e);
+        });
       });
-      res.on('end', async () => {
-        return resolve(JSON.parse(data));
-      });
-      res.on('error', (e) => {
+      req.on('error', (e) => {
         reject(e);
       });
+      req.end();
     });
-    req.on('error', (e) => {
-      reject(e);
-    });
-    req.end();
-});
   }
 
   runQuery(queryname = "MyQuery", parameters = {}) {
     return new Promise((resolve, reject) => {
-    let endpoints = `/query/${this.GRAPH}/${queryname}`;
-    if (parameters != {}) {
-      endpoints += "?";
-      let c = 0;
-      for (let params in parameters) {
-        endpoints += `${params}=${parameters[params]}&`;
-      }
-    }
-    endpoints = endpoints.slice(0, -1);
-    const options = {
-      hostname: `${this.HOST}`,
-      port: 9000,
-      path: endpoints,
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.TOKEN}`
-      }
-    };
-    const req = https.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
-      });
-      res.on('end', async () => {
-        if (JSON.parse(data)["error"]) {
-          console.error(JSON.parse(data)["message"]);
-        } else {
-          return resolve(JSON.parse(data)["results"]);
+      let endpoints = `/query/${this.GRAPH}/${queryname}`;
+      if (parameters != {}) {
+        endpoints += "?";
+        let c = 0;
+        for (let params in parameters) {
+          endpoints += `${params}=${parameters[params]}&`;
         }
+      }
+      endpoints = endpoints.slice(0, -1);
+      const options = {
+        hostname: `${this.HOST}`,
+        port: 9000,
+        path: endpoints,
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.TOKEN}`
+        }
+      };
+      const req = https.request(options, res => {
+        console.log(`statusCode: ${res.statusCode}`)
+        let data = '';
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', async () => {
+          if (JSON.parse(data)["error"]) {
+            console.error(JSON.parse(data)["message"]);
+          } else {
+            return resolve(JSON.parse(data)["results"]);
+          }
+        });
+        res.on('error', (e) => {
+          reject(e);
+        });
       });
-      res.on('error', (e) => {
+      req.on('error', (e) => {
         reject(e);
       });
+      req.end();
     });
-    req.on('error', (e) => {
-      reject(e);
-    });
-    req.end();
-});
   }
 }
 
