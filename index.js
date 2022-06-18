@@ -5,23 +5,30 @@ exports.TigerGraphConnection = (host = "localhost", graphname = "MyGraph", usern
     "graph": graphname
   });
 
-  let options = {
-    hostname: host,
-    port: 9000,
-    path: '/requesttoken',
-    method: 'POST',
-    headers: {
-      'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64'),
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': postData.length
-      }
-  };
-
   return new Promise((resolve, reject) => {
-    let req = https.request(options, (res) => {
-      console.log('statusCode:', res.statusCode);
-      console.log('headers:', res.headers);
-  
+    if (host.substring(0, 8) === "https://") {
+      host = host.substring(8, host.length);
+    } else if (host.substring(0, 7) === "http://") {
+      reject("Invalid url, currently only https:// domains are supported");
+    } 
+
+    if (host[host.length-1] === '/') {
+      host = host.substring(0, host.length-1);
+    }
+
+    let options = {
+      hostname: host,
+      port: 9000,
+      path: '/requesttoken',
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + Buffer.from(`${username}:${password}`).toString('base64'),
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': postData.length
+        }
+    };
+
+    let req = https.request(options, (res) => {  
       let data = '';
       res.on('data', (chunk) => {
         data += chunk;
@@ -98,43 +105,45 @@ class TigerGraphConnection {
    * @param {Integer} seconds 
    * @returns 
    */
-  statistic(seconds = 60) {
-    if (seconds > 60 || seconds < 0) {
-      console.error("Seconds must be between 0-60 inclusive.")
-    } else {
-        return new Promise((resolve, reject) => {
-            const options = {
-                hostname: this.HOST,
-                port: 9000,
-                path: `/statistics/${this.GRAPH}?seconds=${seconds}`,
-                method: 'GET',
-                headers: {
-                'Authorization': `Bearer ${this.TOKEN}`
-                }
-            }
-            const req = https.request(options, res => {
-                console.log(`statusCode: ${res.statusCode}`)
-                let data = '';
-                res.on('data', chunk => {
-                data += chunk;
-                });
-                res.on('end', async () => {
-                return resolve(JSON.parse(data));
-                });
-            });
-            req.on('error', (e) => {
-              reject(e);
-            });
-            req.end();
-        });
+  statistic(seconds = 60) { // Consistently returning {} — could be a bug, will ask TG Team
+    const options = {
+      hostname: this.HOST,
+      port: 9000,
+      path: `/statistics/${this.GRAPH}?seconds=${seconds}`,
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${this.TOKEN}`
+      }
     }
+    return new Promise((resolve, reject) => {
+      if (seconds > 60 || seconds < 0) {
+        reject("Seconds must be between 0-60 inclusive.");
+      } else {
+        const req = https.request(options, res => {
+          console.log(`statusCode: ${res.statusCode}`)
+          let data = '';
+          res.on('data', chunk => {
+            data += chunk;
+          });
+          res.on('end', async () => {
+            return resolve(JSON.parse(data));
+          });
+        });
+        req.on('error', (e) => {
+          reject(e);
+        });
+        req.end();
+      }
+      
+  });
+    
   }
   getEndpoints() {
     return new Promise((resolve, reject) => {
         const options = {
             hostname: this.HOST,
             port: 9000,
-            path: '/endpoints',
+            path: '/endpoints/' + this.GRAPH,
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${this.TOKEN}`
@@ -161,7 +170,7 @@ class TigerGraphConnection {
         const options = {
         hostname: this.HOST,
         port: 9000,
-        path: '/version',
+        path: '/version/' + this.GRAPH,
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${this.TOKEN}`
