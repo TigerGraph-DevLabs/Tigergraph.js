@@ -65,32 +65,25 @@ class TigerGraphConnection {
     this.TOKEN = token;
   }
 
-  /**
-   * 
-   * @param {Boolean} builtin 
-   * @param {Boolean} dynamic 
-   * @param {Boolean} static_param 
-   * @returns 
-   */
-  echo(builtin = true, dynamic = true, static_param = true) {
+  echo() {
     return new Promise ((resolve, reject) => {
         const options = {
             hostname: `${this.HOST}`,
             port: 9000,
-            path: `/endpoints?builtin=${builtin}&dynamic=${dynamic}&static=${static_param}`,
+            path: `/echo`,
             method: 'GET',
             headers: {
             'Authorization': `Bearer ${this.TOKEN}`
             }
         }
         const req = https.request(options, res => {
-            console.log(`statusCode: ${res.statusCode}`)
             let data = '';
             res.on('data', chunk => {
-            data += chunk;
+              data += chunk;
             });
             res.on('end', () => {
-            return resolve(JSON.parse(data));
+              if (JSON.parse(data)["error"]) reject(JSON.parse(data)["error"]);
+              else return resolve(JSON.parse(data)["message"]);
             });
         });
         req.on('error', (e) => {
@@ -120,7 +113,6 @@ class TigerGraphConnection {
         reject("Seconds must be between 0-60 inclusive.");
       } else {
         const req = https.request(options, res => {
-          console.log(`statusCode: ${res.statusCode}`)
           let data = '';
           res.on('data', chunk => {
             data += chunk;
@@ -150,7 +142,6 @@ class TigerGraphConnection {
             }
         }
         const req = https.request(options, res => {
-            console.log(`statusCode: ${res.statusCode}`)
             let data = '';
             res.on('data', chunk => {
                 data += chunk;
@@ -177,7 +168,6 @@ class TigerGraphConnection {
         }
         }
         const req = https.request(options, res => {
-            console.log(`statusCode: ${res.statusCode}`)
             let data = '';
             res.on('data', chunk => {
                 data += chunk;
@@ -213,7 +203,6 @@ class TigerGraphConnection {
         }
       };
       const req = https.request(options, res => {
-        console.log(`statusCode: ${res.statusCode}`)
         let data = '';
         res.on('data', chunk => {
           data += chunk;
@@ -255,7 +244,6 @@ class TigerGraphConnection {
         }
       };
       const req = https.request(options, res => {
-        console.log(`statusCode: ${res.statusCode}`);
         let data = '';
         res.on('data', chunk => {
           data += chunk;
@@ -301,7 +289,6 @@ class TigerGraphConnection {
         }
       };
       const req = https.request(options, res => {
-        console.log(`statusCode: ${res.statusCode}`)
         let data = '';
         res.on('data', chunk => {
           data += chunk;
@@ -343,7 +330,6 @@ class TigerGraphConnection {
         }
       };
       const req = https.request(options, res => {
-        console.log(`statusCode: ${res.statusCode}`);
         let data = '';
         res.on('data', chunk => {
           data += chunk;
@@ -414,7 +400,6 @@ class TigerGraphConnection {
         }
       };
       const req = https.request(options, res => {
-        console.log(`statusCode: ${res.statusCode}`)
         let data = '';
         res.on('data', chunk => {
           data += chunk;
@@ -454,7 +439,6 @@ class TigerGraphConnection {
         }
       };
       const req = https.request(options, res => {
-        console.log(`statusCode: ${res.statusCode}`)
         let data = '';
         res.on('data', chunk => {
           data += chunk;
