@@ -2,7 +2,7 @@ const https = require("https")
 
 exports.TigerGraphConnection = (host = "localhost", graphname = "MyGraph", username = "tigergraph", password = "tigergraph") => {
   let postData = JSON.stringify({
-    "graph": graphname
+    graph: graphname
   });
 
   return new Promise((resolve, reject) => {
@@ -202,38 +202,38 @@ class TigerGraphConnection {
    * @param {String} vertex 
    */
   getVertices(vertex = "_") {
-      return new Promise((resolve, reject) => {
-    const options = {
-      hostname: `${this.HOST}`,
-      port: 9000,
-      path: `/graph/${this.GRAPH}/vertices/${vertex}`,
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${this.TOKEN}`
-      }
-    };
-    const req = https.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
-      });
-      res.on('end', async () => {
-        if (JSON.parse(data)["error"]) {
-          console.error(JSON.parse(data)["message"]);
-        } else {
-          return resolve(JSON.parse(data)["results"]);
+    return new Promise((resolve, reject) => {
+      const options = {
+        hostname: `${this.HOST}`,
+        port: 9000,
+        path: `/graph/${this.GRAPH}/vertices/${vertex}`,
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.TOKEN}`
         }
+      };
+      const req = https.request(options, res => {
+        console.log(`statusCode: ${res.statusCode}`)
+        let data = '';
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', async () => {
+          if (JSON.parse(data)["error"]) {
+            console.error(JSON.parse(data)["message"]);
+          } else {
+            return resolve(JSON.parse(data)["results"]);
+          }
+        });
+        res.on('error', (e) => {
+          reject(e);
+        });
       });
-      res.on('error', (e) => {
+      req.on('error', (e) => {
         reject(e);
       });
+      req.end();
     });
-    req.on('error', (e) => {
-      reject(e);
-    });
-    req.end();
-      });
   }
 
   /**
@@ -243,37 +243,39 @@ class TigerGraphConnection {
    * @param {JSON} attributes
    */
    upsertVertex(vertex_name = "_", vertex_id = "_", attributes = {}) {
+    let postData = JSON.stringify({vertices: {[vertex_name]: {[vertex_id]: attributes}}});
     return new Promise((resolve, reject) => {
-    const options = {
-      hostname: `${this.HOST}`,
-      port: 9000,
-      path: `/graph/${this.GRAPH}`,
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.TOKEN}`
-      }
-    };
-    const req = https.request(options, res => {
-      console.log(`statusCode: ${res.statusCode}`)
-      let data = '';
-      res.on('data', chunk => {
-        data += chunk;
-      });
-      res.on('end', async () => {
-        if (JSON.parse(data)["error"]) {
-          console.error(JSON.parse(data)["message"]);
-        } else {
-          return resolve(JSON.parse(data)["results"]);
+      const options = {
+        hostname: `${this.HOST}`,
+        port: 9000,
+        path: `/graph/${this.GRAPH}`,
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.TOKEN}`
         }
+      };
+      const req = https.request(options, res => {
+        console.log(`statusCode: ${res.statusCode}`);
+        let data = '';
+        res.on('data', chunk => {
+          data += chunk;
+        });
+        res.on('end', async () => {
+          if (JSON.parse(data)["error"]) {
+            reject(JSON.parse(data)["message"]);
+          } else {
+            return resolve(JSON.parse(data)["results"]);
+          }
+        });
+        res.on('error', (e) => {
+          reject(e);
+        });
       });
-      res.on('error', (e) => {
+      req.on('error', (e) => {
         reject(e);
-      });
-    });
-    req.on('error', (e) => {
-      reject(e);
-    });
-    req.end();
+      });    
+      req.write(postData);
+      req.end();
     });
   }
 
