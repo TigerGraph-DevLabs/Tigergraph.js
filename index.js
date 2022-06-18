@@ -1,13 +1,6 @@
 const https = require("https")
 
-/**
- * 
- * @param {String} secret 
- * @param {String} domain 
- * @param {Integer} lifetime 
- * @returns 
- */
-exports.getToken = getToken = (host = "localhost", graphname = "MyGraph", username = "tigergraph", password = "tigergraph") => {
+exports.TigerGraphConnection = (host = "localhost", graphname = "MyGraph", username = "tigergraph", password = "tigergraph") => {
   let postData = JSON.stringify({
     "graph": graphname
   });
@@ -34,7 +27,7 @@ exports.getToken = getToken = (host = "localhost", graphname = "MyGraph", userna
         data += chunk;
       });
       res.on('end', async () => {
-        return resolve(JSON.parse(data)["results"]["token"]);
+        return resolve(new TigerGraphConnection(host, graphname, username, password, JSON.parse(data)["results"]["token"]));
       });
     });
   
@@ -45,9 +38,9 @@ exports.getToken = getToken = (host = "localhost", graphname = "MyGraph", userna
     req.write(postData);
     req.end();
   });
-}
+};
 
-class createTigerGraphConnection {
+class TigerGraphConnection {
 
   /**
    * Connect to the TG Cloud Solution
@@ -55,15 +48,13 @@ class createTigerGraphConnection {
    * @param {String} graph 
    * @param {String} username 
    * @param {String} password 
-   * @param {String} secret 
    * @param {String} token 
    */  
-  constructor(host = "localhost", graph = "MyGraph", username = "tigergraph", password = "tigergraph", secret, token) {
+  constructor(host = "localhost", graph = "MyGraph", username = "tigergraph", password = "tigergraph", token = "") {
     this.HOST = host;
     this.GRAPH = graph;
     this.USERNAME = username;
     this.PASSWORD = password;
-    this.SECRET = secret;
     this.TOKEN = token;
   }
 
@@ -435,4 +426,4 @@ class createTigerGraphConnection {
   }
 }
 
-exports.createTigerGraphConnection = createTigerGraphConnection;
+// exports.createTigerGraphConnection = createTigerGraphConnection;
