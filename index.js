@@ -209,7 +209,7 @@ class TigerGraphConnection {
         });
         res.on('end', async () => {
           if (JSON.parse(data)["error"]) {
-            console.error(JSON.parse(data)["message"]);
+            reject(JSON.parse(data)["message"]);
           } else {
             return resolve(JSON.parse(data)["results"]);
           }
@@ -232,7 +232,11 @@ class TigerGraphConnection {
    * @param {JSON} attributes
    */
    upsertVertex(vertex_name = "_", vertex_id = "_", attributes = {}) {
-    let postData = JSON.stringify({vertices: {[vertex_name]: {[vertex_id]: attributes}}});
+    let formatted_attributes = {};
+    for (let key in attributes) {
+      formatted_attributes[key] = {value: attributes[key]}
+    }
+    let postData = JSON.stringify({vertices: {[vertex_name]: {[vertex_id]: formatted_attributes}}});
     return new Promise((resolve, reject) => {
       const options = {
         hostname: `${this.HOST}`,
@@ -295,7 +299,7 @@ class TigerGraphConnection {
         });
         res.on('end', async () => {
           if (JSON.parse(data)["error"]) {
-            console.error(JSON.parse(data)["message"]);
+            reject(JSON.parse(data)["message"]);
           } else {
             return resolve(JSON.parse(data)["results"]);
           }
@@ -318,7 +322,11 @@ class TigerGraphConnection {
    * @param {JSON} attributes
    */
   upsertEdge(source_vertex_name = "_", source_vertex_id = "_", edge_name, target_vertex_name = "_", target_vertex_id = "_", attributes = {}) {
-    let postData = JSON.stringify({edges: {[source_vertex_name]: {[source_vertex_id]: {[edge_name]: {[target_vertex_name]: {[target_vertex_id]: attributes}}}}}});
+    let formatted_attributes = {};
+    for (let key in attributes) {
+      formatted_attributes[key] = {value: attributes[key]}
+    }
+    let postData = JSON.stringify({edges: {[source_vertex_name]: {[source_vertex_id]: {[edge_name]: {[target_vertex_name]: {[target_vertex_id]: formatted_attributes}}}}}});
     return new Promise((resolve, reject) => {
       const options = {
         hostname: `${this.HOST}`,
@@ -445,7 +453,7 @@ class TigerGraphConnection {
         });
         res.on('end', async () => {
           if (JSON.parse(data)["error"]) {
-            console.error(JSON.parse(data)["message"]);
+            reject(JSON.parse(data)["message"]);
           } else {
             return resolve(JSON.parse(data)["results"]);
           }
