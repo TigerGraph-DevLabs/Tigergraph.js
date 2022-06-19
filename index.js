@@ -96,9 +96,8 @@ class TigerGraphConnection {
   /**
    * 
    * @param {Integer} seconds 
-   * @returns 
    */
-  statistic(seconds = 60) { // Consistently returning {} — could be a bug, will ask TG Team
+  getStatistics(seconds = 60) { // Consistently returning {} — could be a bug, will ask TG Team
     const options = {
       hostname: this.HOST,
       port: 9000,
@@ -130,12 +129,19 @@ class TigerGraphConnection {
   });
     
   }
-  getEndpoints() {
+
+  /**
+   * 
+   * @param {Boolean} builtin 
+   * @param {Boolean} dynamic 
+   * @param {Boolean} static 
+   */
+  getEndpoints(builtin = true, dynamic = true, static = true) {
     return new Promise((resolve, reject) => {
         const options = {
             hostname: this.HOST,
             port: 9000,
-            path: '/endpoints/' + this.GRAPH,
+            path: `/endpoints?builtin=${builtin}&dynamic=${dynamic}&static=${static}`,
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${this.TOKEN}`
@@ -156,7 +162,7 @@ class TigerGraphConnection {
         req.end();
     });
   }
-  version() {
+  getVersion() {
     return new Promise((resolve, reject) => {
         const options = {
         hostname: this.HOST,
@@ -189,14 +195,14 @@ class TigerGraphConnection {
 
   /**
    * 
-   * @param {String} vertex 
+   * @param {String} vertexType 
    */
-  getVertices(vertex = "_") {
+   getVertexType(vertexType = "_") {
     return new Promise((resolve, reject) => {
       const options = {
         hostname: `${this.HOST}`,
         port: 9000,
-        path: `/graph/${this.GRAPH}/vertices/${vertex}`,
+        path: `/graph/${this.GRAPH}/vertices/${vertexType}`,
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.TOKEN}`
@@ -227,16 +233,16 @@ class TigerGraphConnection {
 
   /**
    * 
-   * @param {String} vertex_name
-   * @param {String} vertex_id
+   * @param {String} vertexType
+   * @param {String} vertexId
    * @param {JSON} attributes
    */
-   upsertVertex(vertex_name = "_", vertex_id = "_", attributes = {}) {
+   upsertVertex(vertexType = "_", vertexId = "_", attributes = {}) {
     let formatted_attributes = {};
     for (let key in attributes) {
       formatted_attributes[key] = {value: attributes[key]}
     }
-    let postData = JSON.stringify({vertices: {[vertex_name]: {[vertex_id]: formatted_attributes}}});
+    let postData = JSON.stringify({vertices: {[vertexType]: {[vertexId]: formatted_attributes}}});
     return new Promise((resolve, reject) => {
       const options = {
         hostname: `${this.HOST}`,
@@ -277,16 +283,16 @@ class TigerGraphConnection {
 
   /**
    * 
-   * @param {String} vertex_type 
-   * @param {String} vertex_id 
-   * @param {String} edge 
+   * @param {String} sourceVertexType 
+   * @param {String} sourceVertexId 
+   * @param {String} edgeType 
    */
-  getEdges(vertex_type, vertex_id, edge = "_") {
+  getEdges(sourceVertexType, sourceVertexId, edgeType = "_") {
     return new Promise((resolve, reject) => {
       const options = {
         hostname: `${this.HOST}`,
         port: 9000,
-        path: `/graph/${this.GRAPH}/edges/${vertex_type}/${vertex_id}/${edge}`,
+        path: `/graph/${this.GRAPH}/edges/${sourceVertexType}/${sourceVertexId}/${edgeType}`,
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.TOKEN}`
@@ -317,16 +323,19 @@ class TigerGraphConnection {
 
   /**
    * 
-   * @param {String} vertex_name
-   * @param {String} vertex_id
+   * @param {String} sourceVertexType
+   * @param {String} sourceVertexId
+   * @param {String} edgeType
+   * @param {String} targetVertexType
+   * @param {String} targetVertexId
    * @param {JSON} attributes
    */
-  upsertEdge(source_vertex_name = "_", source_vertex_id = "_", edge_name, target_vertex_name = "_", target_vertex_id = "_", attributes = {}) {
+  upsertEdge(sourceVertexType = "_", sourceVertexId = "_", edgeType = "_", targetVertexType = "_", targetVertexId = "_", attributes = {}) {
     let formatted_attributes = {};
     for (let key in attributes) {
       formatted_attributes[key] = {value: attributes[key]}
     }
-    let postData = JSON.stringify({edges: {[source_vertex_name]: {[source_vertex_id]: {[edge_name]: {[target_vertex_name]: {[target_vertex_id]: formatted_attributes}}}}}});
+    let postData = JSON.stringify({edges: {[sourceVertexType]: {[sourceVertexId]: {[edgeType]: {[targetVertexType]: {[targetVertexId]: formatted_attributes}}}}}});
     return new Promise((resolve, reject) => {
       const options = {
         hostname: `${this.HOST}`,
@@ -396,6 +405,10 @@ class TigerGraphConnection {
     });
   }
 
+  /**
+   * 
+   * @param {Array} requestid
+   */
   abortQuery(requestid = ["all"]) {
     return new Promise((resolve, reject) => {
       const options = {
@@ -426,14 +439,19 @@ class TigerGraphConnection {
     });
   }
 
-  runQuery(queryname = "MyQuery", parameters = {}) {
+  /**
+   * 
+   * @param {String} queryname
+   * @param {JSON} params
+   */
+  runInstalledQuery(queryname = "MyQuery", params = {}) {
     return new Promise((resolve, reject) => {
       let endpoints = `/query/${this.GRAPH}/${queryname}`;
-      if (parameters != {}) {
+      if (params != {}) {
         endpoints += "?";
         let c = 0;
-        for (let params in parameters) {
-          endpoints += `${params}=${parameters[params]}&`;
+        for (let p in params) {
+          endpoints += `${p}=${params[p]}&`;
         }
       }
       endpoints = endpoints.slice(0, -1);
@@ -469,5 +487,3 @@ class TigerGraphConnection {
     });
   }
 }
-
-// exports.createTigerGraphConnection = createTigerGraphConnection;
