@@ -3,70 +3,36 @@
 ## echo
 
 ### About
-Echo finds the approximate time in between launches.
+Test the connection with echo() which will return "Hello GSQL"
 
 ### Code
 ```
-conn.echo(builtin, dynamic, statistic, callback);
+conn.echo();
 ```
 ```
-conn.echo(true, true, true, (data) => {
-    console.log(data);
-});
+conn.echo().then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- buildin
-    - Type: Boolean
-    - Description: Checks for endpoints preinstalled in the TigerGraph system.
-- dynamic
-    - Type: Boolean
-    - Description: Checks for endpoints generated when compiling GSQL queries.
-- static
-    - Type: Boolean
-    - Description: Checks for user-installed endpoints.
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
-
-## statistic
-
-### About
-Echo finds the approximate time in between launches.
-
-### Code
-```
-conn.echo(callback);
-```
-```
-conn.echo((data) => {
-    console.log(data);
-});
-```
-
-### Parameters
-- Callback
-  - Function of what to do next
-
+None
 
 ## getEndpoints
+
 ### About
-Echo finds the approximate time in between launches.
+Returns the endpoints of the graph
 
 ### Code
 ```
-conn.echo(builtin, dynamic, statistic, callback);
+conn.getEndpoints(builtin, dynamic, static);
 ```
 ```
-conn.echo(true, true, true, (data) => {
-    console.log(data);
-});
+conn.getEndpoints(true, true, true).then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- buildin
+- builtin
     - Type: Boolean
     - Description: Checks for endpoints preinstalled in the TigerGraph system.
 - dynamic
@@ -75,35 +41,20 @@ conn.echo(true, true, true, (data) => {
 - static
     - Type: Boolean
     - Description: Checks for user-installed endpoints.
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
 
 ## version
+
 ### About
-Echo finds the approximate time in between launches.
+Returns the version.
 
 ### Code
 ```
-conn.echo(builtin, dynamic, statistic, callback);
+conn.getVersion();
 ```
 ```
-conn.echo(true, true, true, (data) => {
-    console.log(data);
-});
+conn.getVersion().then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- buildin
-    - Type: Boolean
-    - Description: Checks for endpoints preinstalled in the TigerGraph system.
-- dynamic
-    - Type: Boolean
-    - Description: Checks for endpoints generated when compiling GSQL queries.
-- static
-    - Type: Boolean
-    - Description: Checks for user-installed endpoints.
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
+None

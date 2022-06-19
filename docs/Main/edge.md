@@ -3,60 +3,58 @@
 ## getEdges
 
 ### About
-Retrieves edges of a certain type from the graph.
+Retrieves edges of a certain type from a certain vertex from the graph
 
 ### Code
 ```
-conn.getEdges(vertex_type, vertex_id, edge, callback);
+conn.getEdges(sourceVertexType, sourceVertexId, edgeType);
 ```
 ```
-conn.getEdges("Vertex Type", "Unique_ID", "_", (data) => {
-    console.log(data);
-});
+conn.getEdges("Doc", "Doc1", "LINKS_TO").then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- vertex_type
+- sourceVertexType
     - Type: String
-    - Description: The type of the vertices
-- vertex_id
+    - Description: The type of the vertices the edges will be attached to.
+- sourceVertexId
+    - Type: Any
+    - Description: The unique id of the vertex the edges must be attached to
+- edgeType
     - Type: String
-    - Description: The unqiue id of the vertex
-- edge
-    - Type: String
-    - Description: The edge types desired
-    - Note: "_" will return all edges
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
+    - Description: The edge type desired
 
-## delEdges
+## upsertEdge
 
 ### About
-Echo finds the approximate time in between launches.
+Adds a new edge to your graph
 
 ### Code
 ```
-conn.echo(builtin, dynamic, statistic, callback);
+conn.upsertEdge(sourceVertexType, source_vertex_id, edge_name, target_vertex_name, target_vertex_id, attributes)
 ```
 ```
-conn.echo(true, true, true, (data) => {
-    console.log(data);
-});
+conn.upsertEdge("Doc", "Doc1", "LINKS_TO", "Doc", "Doc2", {weight: 5.0}).then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- buildin
-    - Type: Boolean
-    - Description: Checks for endpoints preinstalled in the TigerGraph system.
-- dynamic
-    - Type: Boolean
-    - Description: Checks for endpoints generated when compiling GSQL queries.
-- static
-    - Type: Boolean
-    - Description: Checks for user-installed endpoints.
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
+- sourceVertexType
+    - Type: String
+    - Description: Type of source vertex.
+- source_vertex_id
+    - Type: Any
+    - Description: ID of source vertex.
+- edge_name
+    - Type: String
+    - Description: Type of edge to upsert.
+- target_vertex_name
+    - Type: String
+    - Description: Type of target vertex.
+- target_vertex_id
+    - Type: Any
+    - Description: ID of target vertex.
+- attributes
+    - Type: JSON Object
+    - Description: Map of all the attributes of the edge.

@@ -11,3 +11,8 @@ nav:
   - license.md
 
 theme: material
+
+extra_css:
+  - extra.css
+
+repo_url: https://github.com/TigerGraph-DevLabs/Tigergraph.js
