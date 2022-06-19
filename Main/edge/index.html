@@ -304,11 +304,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#deledges" class="md-nav__link">
-    delEdges
+  <a href="#upsertedge" class="md-nav__link">
+    upsertEdge
   </a>
   
-    <nav class="md-nav" aria-label="delEdges">
+    <nav class="md-nav" aria-label="upsertEdge">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -471,11 +471,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#deledges" class="md-nav__link">
-    delEdges
+  <a href="#upsertedge" class="md-nav__link">
+    upsertEdge
   </a>
   
-    <nav class="md-nav" aria-label="delEdges">
+    <nav class="md-nav" aria-label="upsertEdge">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -521,68 +521,68 @@
 <h1 id="edges-functions">Edges Functions</h1>
 <h2 id="getedges">getEdges</h2>
 <h3 id="about">About</h3>
-<p>Retrieves edges of a certain type from the graph.</p>
+<p>Retrieves edges of a certain type from a certain vertex from the graph</p>
 <h3 id="code">Code</h3>
-<pre><code>conn.getEdges(vertex_type, vertex_id, edge, callback);
+<pre><code>conn.getEdges(sourceVertexType, sourceVertexId, edgeType);
 </code></pre>
-<pre><code>conn.getEdges(&quot;Vertex Type&quot;, &quot;Unique_ID&quot;, &quot;_&quot;, (data) =&gt; {
-    console.log(data);
-});
+<pre><code>conn.getEdges(&quot;Doc&quot;, &quot;Doc1&quot;, &quot;LINKS_TO&quot;).then((data) =&gt; console.log(data));
 </code></pre>
 <h3 id="parameters">Parameters</h3>
 <ul>
-<li>vertex_type<ul>
+<li>sourceVertexType<ul>
 <li>Type: String</li>
-<li>Description: The type of the vertices</li>
+<li>Description: The type of the vertices the edges will be attached to.</li>
 </ul>
 </li>
-<li>vertex_id<ul>
+<li>sourceVertexId<ul>
+<li>Type: Any</li>
+<li>Description: The unique id of the vertex the edges must be attached to</li>
+</ul>
+</li>
+<li>edgeType<ul>
 <li>Type: String</li>
-<li>Description: The unqiue id of the vertex</li>
-</ul>
-</li>
-<li>edge<ul>
-<li>Type: String</li>
-<li>Description: The edge types desired</li>
-<li>Note: "_" will return all edges</li>
-</ul>
-</li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
+<li>Description: The edge type desired</li>
 </ul>
 </li>
 </ul>
-<h2 id="deledges">delEdges</h2>
+<h2 id="upsertedge">upsertEdge</h2>
 <h3 id="about_1">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
+<p>Adds a new edge to your graph</p>
 <h3 id="code_1">Code</h3>
-<pre><code>conn.echo(builtin, dynamic, statistic, callback);
+<pre><code>conn.upsertEdge(sourceVertexType, source_vertex_id, edge_name, target_vertex_name, target_vertex_id, attributes)
 </code></pre>
-<pre><code>conn.echo(true, true, true, (data) =&gt; {
-    console.log(data);
-});
+<pre><code>conn.upsertEdge(&quot;Doc&quot;, &quot;Doc1&quot;, &quot;LINKS_TO&quot;, &quot;Doc&quot;, &quot;Doc2&quot;, {weight: 5.0}).then((data) =&gt; console.log(data));
 </code></pre>
 <h3 id="parameters_1">Parameters</h3>
 <ul>
-<li>buildin<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints preinstalled in the TigerGraph system.</li>
+<li>sourceVertexType<ul>
+<li>Type: String</li>
+<li>Description: Type of source vertex.</li>
 </ul>
 </li>
-<li>dynamic<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints generated when compiling GSQL queries.</li>
+<li>source_vertex_id<ul>
+<li>Type: Any</li>
+<li>Description: ID of source vertex.</li>
 </ul>
 </li>
-<li>static<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for user-installed endpoints.</li>
+<li>edge_name<ul>
+<li>Type: String</li>
+<li>Description: Type of edge to upsert.</li>
 </ul>
 </li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
+<li>target_vertex_name<ul>
+<li>Type: String</li>
+<li>Description: Type of target vertex.</li>
+</ul>
+</li>
+<li>target_vertex_id<ul>
+<li>Type: Any</li>
+<li>Description: ID of target vertex.</li>
+</ul>
+</li>
+<li>attributes<ul>
+<li>Type: JSON Object</li>
+<li>Description: Map of all the attributes of the edge.</li>
 </ul>
 </li>
 </ul>

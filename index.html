@@ -233,13 +233,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#projects" class="md-nav__link">
-    Projects
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -415,13 +408,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#projects" class="md-nav__link">
-    Projects
-  </a>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -448,33 +434,20 @@
 <h2 id="usage">Usage</h2>
 <p>First, have your information in a document (called config.js):</p>
 <pre><code>const credentials = {
-    token: &quot;INSERT_TOKEN_HERE&quot;,
-    secret: &quot;INSERT_SECRET_HERE&quot;,
     password: &quot;INSERT_PASSWORD_HERE&quot;
 }
 
 module.exports = credentials;
 </code></pre>
-<p>While creating your box, you will create a password which you can copy and paste above. To create a secret, go GraphStudio, then Admin --&gt; User Management --&gt; Create Secret, and press Create and copy the secret into the config.js file. Finally, using your secret, you can create a token.</p>
-<p>To create a connection, you'll need a token. To generate a token, run the following code:</p>
+<p>First, create a connection</p>
 <pre><code>const tgjs = require(&quot;tigergraph.js&quot;);
 const cred = require(&quot;./config.js&quot;);
 
-tgjs.getToken(cred.secret); // A token will show on your console. Copy and paste it. 
+tgjs.TigerGraphConnection(&quot;DOMAIN.i.tgcloud.io&quot;, &quot;MyGraph&quot;, &quot;tigergraph&quot;, cred.password).then((conn) =&gt; {
+    // Code here
+});
 </code></pre>
-<p>From there, you can create a connection with your graph, then query it, and add and delete vertices and edges.</p>
-<pre><code>const tgjs = require(&quot;tigergraph.js&quot;);
-const cred = require(&quot;./config.js&quot;);
-
-const conn = new tgjs.createTigerGraphConnection(&quot;DOMAIN.i.tgcloud.io&quot;, &quot;MyGraph&quot;, &quot;tigergraph&quot;, cred.password, cred.secret, cred.token);
-</code></pre>
-<p>Now you're ready to go! Check out the documentation or look at some example projects to get you inspired!</p>
-<h2 id="projects">Projects</h2>
-<ul>
-<li>Introduction to TigerGraph.js</li>
-<li>Combining TigerGraph.js and Discord.js</li>
-<li>Creating a Recommendation App with TigerGraph.js</li>
-</ul>
+<p>Now you're ready to go! Check out the documentation or look at some example projects to get inspired!</p>
 
               
             </article>

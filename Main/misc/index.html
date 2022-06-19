@@ -332,11 +332,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#statistic" class="md-nav__link">
-    statistic
+  <a href="#getendpoints" class="md-nav__link">
+    getEndpoints
   </a>
   
-    <nav class="md-nav" aria-label="statistic">
+    <nav class="md-nav" aria-label="getEndpoints">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -366,11 +366,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#getendpoints" class="md-nav__link">
-    getEndpoints
+  <a href="#version" class="md-nav__link">
+    version
   </a>
   
-    <nav class="md-nav" aria-label="getEndpoints">
+    <nav class="md-nav" aria-label="version">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -389,40 +389,6 @@
         
           <li class="md-nav__item">
   <a href="#parameters_2" class="md-nav__link">
-    Parameters
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#version" class="md-nav__link">
-    version
-  </a>
-  
-    <nav class="md-nav" aria-label="version">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#about_3" class="md-nav__link">
-    About
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#code_3" class="md-nav__link">
-    Code
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parameters_3" class="md-nav__link">
     Parameters
   </a>
   
@@ -539,11 +505,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#statistic" class="md-nav__link">
-    statistic
+  <a href="#getendpoints" class="md-nav__link">
+    getEndpoints
   </a>
   
-    <nav class="md-nav" aria-label="statistic">
+    <nav class="md-nav" aria-label="getEndpoints">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -573,11 +539,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#getendpoints" class="md-nav__link">
-    getEndpoints
+  <a href="#version" class="md-nav__link">
+    version
   </a>
   
-    <nav class="md-nav" aria-label="getEndpoints">
+    <nav class="md-nav" aria-label="version">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -606,40 +572,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#version" class="md-nav__link">
-    version
-  </a>
-  
-    <nav class="md-nav" aria-label="version">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#about_3" class="md-nav__link">
-    About
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#code_3" class="md-nav__link">
-    Code
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#parameters_3" class="md-nav__link">
-    Parameters
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -657,65 +589,25 @@
 <h1 id="other-functions">Other Functions</h1>
 <h2 id="echo">echo</h2>
 <h3 id="about">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
+<p>Test the connection with echo() which will return "Hello GSQL"</p>
 <h3 id="code">Code</h3>
-<pre><code>conn.echo(builtin, dynamic, statistic, callback);
+<pre><code>conn.echo();
 </code></pre>
-<pre><code>conn.echo(true, true, true, (data) =&gt; {
-    console.log(data);
-});
+<pre><code>conn.echo().then((data) =&gt; console.log(data));
 </code></pre>
 <h3 id="parameters">Parameters</h3>
-<ul>
-<li>buildin<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints preinstalled in the TigerGraph system.</li>
-</ul>
-</li>
-<li>dynamic<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints generated when compiling GSQL queries.</li>
-</ul>
-</li>
-<li>static<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for user-installed endpoints.</li>
-</ul>
-</li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
-</ul>
-</li>
-</ul>
-<h2 id="statistic">statistic</h2>
+<p>None</p>
+<h2 id="getendpoints">getEndpoints</h2>
 <h3 id="about_1">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
+<p>Returns the endpoints of the graph</p>
 <h3 id="code_1">Code</h3>
-<pre><code>conn.echo(callback);
+<pre><code>conn.getEndpoints(builtin, dynamic, static);
 </code></pre>
-<pre><code>conn.echo((data) =&gt; {
-    console.log(data);
-});
+<pre><code>conn.getEndpoints(true, true, true).then((data) =&gt; console.log(data));
 </code></pre>
 <h3 id="parameters_1">Parameters</h3>
 <ul>
-<li>Callback</li>
-<li>Function of what to do next</li>
-</ul>
-<h2 id="getendpoints">getEndpoints</h2>
-<h3 id="about_2">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
-<h3 id="code_2">Code</h3>
-<pre><code>conn.echo(builtin, dynamic, statistic, callback);
-</code></pre>
-<pre><code>conn.echo(true, true, true, (data) =&gt; {
-    console.log(data);
-});
-</code></pre>
-<h3 id="parameters_2">Parameters</h3>
-<ul>
-<li>buildin<ul>
+<li>builtin<ul>
 <li>Type: Boolean</li>
 <li>Description: Checks for endpoints preinstalled in the TigerGraph system.</li>
 </ul>
@@ -728,47 +620,19 @@
 <li>static<ul>
 <li>Type: Boolean</li>
 <li>Description: Checks for user-installed endpoints.</li>
-</ul>
-</li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
 </ul>
 </li>
 </ul>
 <h2 id="version">version</h2>
-<h3 id="about_3">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
-<h3 id="code_3">Code</h3>
-<pre><code>conn.echo(builtin, dynamic, statistic, callback);
+<h3 id="about_2">About</h3>
+<p>Returns the version.</p>
+<h3 id="code_2">Code</h3>
+<pre><code>conn.getVersion();
 </code></pre>
-<pre><code>conn.echo(true, true, true, (data) =&gt; {
-    console.log(data);
-});
+<pre><code>conn.getVersion().then((data) =&gt; console.log(data));
 </code></pre>
-<h3 id="parameters_3">Parameters</h3>
-<ul>
-<li>buildin<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints preinstalled in the TigerGraph system.</li>
-</ul>
-</li>
-<li>dynamic<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints generated when compiling GSQL queries.</li>
-</ul>
-</li>
-<li>static<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for user-installed endpoints.</li>
-</ul>
-</li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
-</ul>
-</li>
-</ul>
+<h3 id="parameters_2">Parameters</h3>
+<p>None</p>
 
               
             </article>

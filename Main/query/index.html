@@ -591,62 +591,38 @@
 <h3 id="about">About</h3>
 <p>Runs a query from the graph.</p>
 <h3 id="code">Code</h3>
-<pre><code>conn.runQuery(query_name, parameters, callback);
+<pre><code>conn.runQuery(queryname, params);
 </code></pre>
-<pre><code>conn.runQuery(&quot;MyQuery&quot;, {}, (data) =&gt; {
-    console.log(data);
-});
+<pre><code>conn.runQuery(&quot;MyQuery&quot;, {param: &quot;parameter&quot;}).then((data) =&gt; console.log(data));
 </code></pre>
 <h3 id="parameters">Parameters</h3>
 <ul>
-<li>query_name<ul>
+<li>queryname<ul>
 <li>Type: String</li>
 <li>Description: The name of the query desired to run</li>
 </ul>
 </li>
-<li>parameters<ul>
+<li>params<ul>
 <li>Type: JSON Object</li>
 <li>Description: An object of {parameter_name: parameter_value} for the parameters to be passed to the query. </li>
 <li>Note: If no parameters, pass {}.</li>
 </ul>
 </li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
-</ul>
-</li>
 </ul>
 <h2 id="abortquery">abortQuery</h2>
 <h3 id="about_1">About</h3>
-<p>Shows all the queries running.</p>
+<p>Aborts a query.</p>
 <h3 id="code_1">Code</h3>
-<pre><code>conn.getEdges(vertex_type, vertex_id, edge, callback);
+<pre><code>conn.getEdges(vertex_type, vertex_id, edge);
 </code></pre>
-<pre><code>conn.getVertices(&quot;Vertex Type&quot;, &quot;Unique_ID&quot;, &quot;_&quot;, (data) =&gt; {
-    console.log(data);
-});
+<pre><code>conn.getVertices(&quot;Vertex Type&quot;, &quot;Unique_ID&quot;, &quot;_&quot;).then((data) =&gt; console.log(data));
 </code></pre>
 <h3 id="parameters_1">Parameters</h3>
 <ul>
-<li>vertex_type<ul>
-<li>Type: String</li>
-<li>Description: The type of the vertices</li>
-</ul>
-</li>
-<li>vertex_id<ul>
-<li>Type: String</li>
-<li>Description: The unqiue id of the vertex</li>
-</ul>
-</li>
-<li>edge<ul>
-<li>Type: String</li>
-<li>Description: The edge types desired</li>
-<li>Note: "_" will return all edges</li>
-</ul>
-</li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
+<li>requestid<ul>
+<li>Type: Array</li>
+<li>Description: IDs of queries to abort</li>
+<li>Note: To abort all, use ["all"]</li>
 </ul>
 </li>
 </ul>
@@ -654,36 +630,12 @@
 <h3 id="about_2">About</h3>
 <p>Shows all the queries running.</p>
 <h3 id="code_2">Code</h3>
-<pre><code>conn.getEdges(vertex_type, vertex_id, edge, callback);
+<pre><code>conn.showProcessesList();
 </code></pre>
-<pre><code>conn.getVertices(&quot;Vertex Type&quot;, &quot;Unique_ID&quot;, &quot;_&quot;, (data) =&gt; {
-    console.log(data);
-});
+<pre><code>conn.showProcessesList().then((data) =&gt; console.log(data));
 </code></pre>
 <h3 id="parameters_2">Parameters</h3>
-<ul>
-<li>vertex_type<ul>
-<li>Type: String</li>
-<li>Description: The type of the vertices</li>
-</ul>
-</li>
-<li>vertex_id<ul>
-<li>Type: String</li>
-<li>Description: The unqiue id of the vertex</li>
-</ul>
-</li>
-<li>edge<ul>
-<li>Type: String</li>
-<li>Description: The edge types desired</li>
-<li>Note: "_" will return all edges</li>
-</ul>
-</li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
-</ul>
-</li>
-</ul>
+<p>None</p>
 
               
             </article>

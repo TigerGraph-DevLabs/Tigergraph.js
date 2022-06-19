@@ -256,11 +256,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#getvertices" class="md-nav__link">
-    getVertices
+  <a href="#getvertextype" class="md-nav__link">
+    getVertexType
   </a>
   
-    <nav class="md-nav" aria-label="getVertices">
+    <nav class="md-nav" aria-label="getVertexType">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -290,11 +290,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#delvertices" class="md-nav__link">
-    delVertices
+  <a href="#upsertvertex" class="md-nav__link">
+    upsertVertex
   </a>
   
-    <nav class="md-nav" aria-label="delVertices">
+    <nav class="md-nav" aria-label="upsertVertex">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -437,11 +437,11 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#getvertices" class="md-nav__link">
-    getVertices
+  <a href="#getvertextype" class="md-nav__link">
+    getVertexType
   </a>
   
-    <nav class="md-nav" aria-label="getVertices">
+    <nav class="md-nav" aria-label="getVertexType">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -471,11 +471,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#delvertices" class="md-nav__link">
-    delVertices
+  <a href="#upsertvertex" class="md-nav__link">
+    upsertVertex
   </a>
   
-    <nav class="md-nav" aria-label="delVertices">
+    <nav class="md-nav" aria-label="upsertVertex">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -519,59 +519,45 @@
 
 
 <h1 id="vertices-functions">Vertices Functions</h1>
-<h2 id="getvertices">getVertices</h2>
+<h2 id="getvertextype">getVertexType</h2>
 <h3 id="about">About</h3>
 <p>Retrieves vertices of a certain type from the graph.</p>
 <h3 id="code">Code</h3>
-<pre><code>conn.getVertices(vertex_type, callback);
+<pre><code>conn.getVertexType(vertexType);
 </code></pre>
-<pre><code>conn.getVertices(&quot;Vertex Type&quot;, (data) =&gt; {
-    console.log(data);
-});
+<pre><code>conn.getVertexType(&quot;Vertex Type&quot;).then((data) =&gt; console.log(data));
 </code></pre>
 <h3 id="parameters">Parameters</h3>
 <ul>
-<li>vertex_type<ul>
+<li>vertexType<ul>
 <li>Type: String</li>
 <li>Description: The type of vertex</li>
 </ul>
 </li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
 </ul>
-</li>
-</ul>
-<h2 id="delvertices">delVertices</h2>
+<h2 id="upsertvertex">upsertVertex</h2>
 <h3 id="about_1">About</h3>
-<p>Echo finds the approximate time in between launches.</p>
+<p>Upserts a new vertex to the graph.</p>
 <h3 id="code_1">Code</h3>
-<pre><code>conn.echo(builtin, dynamic, statistic, callback);
+<pre><code>upsertVertex(vertexType, vertexId, attributes);
 </code></pre>
-<pre><code>conn.echo(true, true, true, (data) =&gt; {
-    console.log(data);
-});
+<pre><code>upsertVertex(&quot;Vertex_Type&quot;, &quot;Vertex_ID&quot;, {attr: &quot;sample_attr&quot;}).then((data) =&gt; console.log(data));
 </code></pre>
 <h3 id="parameters_1">Parameters</h3>
 <ul>
-<li>buildin<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints preinstalled in the TigerGraph system.</li>
+<li>vertexType<ul>
+<li>Type: String</li>
+<li>Description: Vertex type to upsert.</li>
 </ul>
 </li>
-<li>dynamic<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for endpoints generated when compiling GSQL queries.</li>
+<li>vertexId<ul>
+<li>Type: Any</li>
+<li>Description: ID of vertex to upsert.</li>
 </ul>
 </li>
-<li>static<ul>
-<li>Type: Boolean</li>
-<li>Description: Checks for user-installed endpoints.</li>
-</ul>
-</li>
-<li>callback<ul>
-<li>Type: Function</li>
-<li>Description: Function of what to do with the values given.</li>
+<li>attributes<ul>
+<li>Type: JSON Object</li>
+<li>Description: Map of attribute names to attribute values.</li>
 </ul>
 </li>
 </ul>
