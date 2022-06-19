@@ -7,57 +7,41 @@ Runs a query from the graph.
 
 ### Code
 ```
-conn.runQuery(query_name, parameters, callback);
+conn.runQuery(queryname, params);
 ```
 ```
-conn.runQuery("MyQuery", {}, (data) => {
-    console.log(data);
-});
+conn.runQuery("MyQuery", {param: "parameter"}).then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- query_name
+- queryname
     - Type: String
     - Description: The name of the query desired to run
-- parameters
+- params
     - Type: JSON Object
     - Description: An object of {parameter_name: parameter_value} for the parameters to be passed to the query. 
     - Note: If no parameters, pass {}.
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
 
 ## abortQuery
 
 ### About
-Shows all the queries running.
+Aborts a query.
 
 ### Code
 ```
-conn.getEdges(vertex_type, vertex_id, edge, callback);
+conn.getEdges(vertex_type, vertex_id, edge);
 ```
 ```
-conn.getVertices("Vertex Type", "Unique_ID", "_", (data) => {
-    console.log(data);
-});
+conn.getVertices("Vertex Type", "Unique_ID", "_").then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- vertex_type
-    - Type: String
-    - Description: The type of the vertices
-- vertex_id
-    - Type: String
-    - Description: The unqiue id of the vertex
-- edge
-    - Type: String
-    - Description: The edge types desired
-    - Note: "_" will return all edges
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
+- requestid
+    - Type: Array
+    - Description: IDs of queries to abort
+    - Note: To abort all, use ["all"]
 
 ## showProcessesList
 
@@ -66,26 +50,12 @@ Shows all the queries running.
 
 ### Code
 ```
-conn.getEdges(vertex_type, vertex_id, edge, callback);
+conn.showProcessesList();
 ```
 ```
-conn.getVertices("Vertex Type", "Unique_ID", "_", (data) => {
-    console.log(data);
-});
+conn.showProcessesList().then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- vertex_type
-    - Type: String
-    - Description: The type of the vertices
-- vertex_id
-    - Type: String
-    - Description: The unqiue id of the vertex
-- edge
-    - Type: String
-    - Description: The edge types desired
-    - Note: "_" will return all edges
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
+None

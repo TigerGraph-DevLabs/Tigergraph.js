@@ -1,55 +1,45 @@
 # Vertices Functions
 
-## getVertices
+## getVertexType
 
 ### About
 Retrieves vertices of a certain type from the graph.
 
 ### Code
 ```
-conn.getVertices(vertex_type, callback);
+conn.getVertexType(vertexType);
 ```
 ```
-conn.getVertices("Vertex Type", (data) => {
-    console.log(data);
-});
+conn.getVertexType("Vertex Type").then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- vertex_type
+- vertexType
     - Type: String
     - Description: The type of vertex
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
 
-## delVertices
+## upsertVertex
 
 ### About
-Echo finds the approximate time in between launches.
+Upserts a new vertex to the graph.
 
 ### Code
 ```
-conn.echo(builtin, dynamic, statistic, callback);
+upsertVertex(vertexType, vertexId, attributes);
 ```
 ```
-conn.echo(true, true, true, (data) => {
-    console.log(data);
-});
+upsertVertex("Vertex_Type", "Vertex_ID", {attr: "sample_attr"}).then((data) => console.log(data));
 ```
 
 ### Parameters
 
-- buildin
-    - Type: Boolean
-    - Description: Checks for endpoints preinstalled in the TigerGraph system.
-- dynamic
-    - Type: Boolean
-    - Description: Checks for endpoints generated when compiling GSQL queries.
-- static
-    - Type: Boolean
-    - Description: Checks for user-installed endpoints.
-- callback
-    - Type: Function
-    - Description: Function of what to do with the values given.
+- vertexType
+    - Type: String
+    - Description: Vertex type to upsert.
+- vertexId
+    - Type: Any
+    - Description: ID of vertex to upsert.
+- attributes
+    - Type: JSON Object
+    - Description: Map of attribute names to attribute values.
