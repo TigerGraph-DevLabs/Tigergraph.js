@@ -134,14 +134,14 @@ class TigerGraphConnection {
    * 
    * @param {Boolean} builtin 
    * @param {Boolean} dynamic 
-   * @param {Boolean} static 
+   * @param {Boolean} user_static 
    */
-  getEndpoints(builtin = true, dynamic = true, static = true) {
+  getEndpoints(builtin = true, dynamic = true, user_static = true) {
     return new Promise((resolve, reject) => {
         const options = {
             hostname: this.HOST,
             port: 9000,
-            path: `/endpoints?builtin=${builtin}&dynamic=${dynamic}&static=${static}`,
+            path: `/endpoints?builtin=${builtin}&dynamic=${dynamic}&static=${user_static}`,
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${this.TOKEN}`
